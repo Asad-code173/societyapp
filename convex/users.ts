@@ -27,9 +27,9 @@ export const upsertFromClerk = internalMutation({
   args: { data: v.any() as Validator<UserJSON> },
   async handler(ctx, { data }) {
     const userAttributes = {
-      clerkId: data.id??"",
-      email: data.email_addresses[0].email_address??"",
-      role:(data.public_metadata?.role as string)|| "resident"
+      clerkId: data.id ?? "",
+      email: data.email_addresses[0].email_address ?? "",
+      role: (data.public_metadata?.role as string) || "resident"
     }
 
     const user = await userByClerkUserId(ctx, data.id)
@@ -77,3 +77,12 @@ async function userByClerkUserId(ctx: QueryCtx, clerkUserId: string) {
     .withIndex('byClerkUserId', q => q.eq('clerkId', clerkUserId))
     .unique()
 }
+export const getByClerkId = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, { clerkId }) => {
+    return await userByClerkUserId(ctx, clerkId);
+  }
+});
+
+
+

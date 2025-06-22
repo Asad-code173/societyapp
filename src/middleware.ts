@@ -7,7 +7,7 @@ const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isResidentRoute = createRouteMatcher(['/resident(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { sessionId, sessionClaims } = await auth();
+  const { sessionId, sessionClaims,redirectToSignIn } = await auth();
   const role = (sessionClaims?.metadata?.role as string) || "resident";
   const currentPath = new URL(req.url).pathname;
   console.log("Path:" +currentPath +" role "+role)
@@ -16,9 +16,11 @@ export default clerkMiddleware(async (auth, req) => {
     return;
   }
 
-  if (isRootRoute(req) && !sessionId) {
-    return NextResponse.redirect(new URL('/sign-in', req.url));
-  }
+  // if (isRootRoute(req) && !sessionId) {
+  //   return NextResponse.redirect(new URL('/sign-in', req.url));
+  // }
+  
+   if (!sessionId) return redirectToSignIn({ returnBackUrl: req.url })
 
   if (isRootRoute(req) && sessionId) {
     if (role === 'admin') {
