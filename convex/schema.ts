@@ -11,12 +11,12 @@ export default defineSchema({
     clerkId: v.string(),   
     fullName: v.string(),
     email: v.string(),
-    phone: v.string(),
-    address: v.string(),
-    apartmentNumber: v.optional(v.string()),
+    Contactnumber: v.string(),
+    apartmentNumber: v.string(),
     moveInDate: v.optional(v.string()),     // ISO string
-    isAdminApproved: v.boolean(),           // default false
-    createdAt: v.string(),                  // ISO string (e.g., Date.now().toISOString())
+    isAdminApproved: v.boolean(),   
+    imageStorageId:v.optional(v.id("_storage"))        // default false
+                     // ISO string (e.g., Date.now().toISOString())
   }).index("by_ClerkId", ["clerkId"]),
 
 })

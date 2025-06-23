@@ -12,7 +12,6 @@ export default async function AdminDashboard() {
   if (!user) {
     return redirect("/sign-in");
   }
-
   const email = user.emailAddresses[0]?.emailAddress;
  
   const id = user.id;
@@ -24,11 +23,12 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <h1>Admin Dashboard</h1>
+      {/* <h1>Admin Dashboard</h1>
       <p><strong>User ID:</strong> {id}</p>
       <p><strong>Email:</strong> {email}</p>
      
-      <p><strong>Role:</strong> {role}</p>
+      <p><strong>Role:</strong> {role}</p> */}
+      
       <UserButton/>
     </div>
   );

@@ -23,7 +23,7 @@ export default async function ResidentDashboard() {
   // console.log(role);
   if (role === 'resident') {
     const onboardInfo = await fetchQuery(api.onboarduser.onboardResidentInfo, { clerkId })
-    if (!onboardInfo || !onboardInfo.isAdminApproved) {
+    if (!onboardInfo || onboardInfo.isAdminApproved != true) {
       return redirect("/resident/onboard");
     }
 

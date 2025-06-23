@@ -76,13 +76,14 @@ async function userByClerkUserId(ctx: QueryCtx, clerkUserId: string) {
     .query('registration')
     .withIndex('byClerkUserId', q => q.eq('clerkId', clerkUserId))
     .unique()
-}
-export const getByClerkId = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, { clerkId }) => {
-    return await userByClerkUserId(ctx, clerkId);
-  }
-});
+ }
+
+// export const getByClerkId = query({
+//   args: { clerkId: v.string() },
+//   handler: async (ctx, { clerkId }) => {
+//     return await userByClerkUserId(ctx, clerkId);
+//   }
+// });
 
 
 
