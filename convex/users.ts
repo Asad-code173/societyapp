@@ -78,12 +78,7 @@ async function userByClerkUserId(ctx: QueryCtx, clerkUserId: string) {
     .unique()
  }
 
-// export const getByClerkId = query({
-//   args: { clerkId: v.string() },
-//   handler: async (ctx, { clerkId }) => {
-//     return await userByClerkUserId(ctx, clerkId);
-//   }
-// });
+
 
 
 

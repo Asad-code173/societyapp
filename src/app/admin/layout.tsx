@@ -14,7 +14,8 @@ export default async function AdminLayout({
     if (!user) redirect("/sign-in");
 
     //   const email = user.emailAddresses[0]?.emailAddress || "";
-    const role = (user.publicMetadata.role as string) || "resident";
+      const role = typeof user.publicMetadata.role === 'string' ? user.publicMetadata.role : 'resident';
+
 
     return (
         <div className=" min-h-screen bg-[#F3F4F6]">

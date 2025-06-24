@@ -1,12 +1,13 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
+
+
 import {
   Form,
   FormControl,
@@ -16,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { UserButton } from "@clerk/nextjs";
 
 const formSchema = z.object({
   clerkId: z.string().min(1, "Clerk ID is required"),
@@ -52,7 +54,7 @@ export default function OnboardPage() {
       form.setValue("clerkId", registration.clerkId);
       form.setValue("email", registration.email);
     }
-  }, [registration]);
+  }, [registration,form]);
 
 
   // image upload 
@@ -60,23 +62,42 @@ export default function OnboardPage() {
   const generateUploadUrl = useMutation(api.storage.generateUploadUrl)
   const createResident = useMutation(api.onboarduser.CreateOnboardUser);
 
-  async function uploadImage(file: File) {
-    const url = await generateUploadUrl();
-    const result = await fetch(url, {
-      method: "POST",
-      body: (() => {
-        const data = new FormData();
-        data.set("file", file);
-        return data;
-      })(),
-    });
-    const { storageId } = await result.json(); // this is imageStorageId
-    return storageId;
+async function uploadImage(file: File) {
+  const url = await generateUploadUrl();
 
+  const result = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": file.type, 
+    },
+    body: file, 
+  });
+
+  if (!result.ok) {
+    console.error("Upload failed:", result.statusText);
+    return null;
   }
+
+  try {
+    const json = await result.json(); 
+    console.log("✅ Parsed upload result:", json);
+    return json.storageId;
+  } catch (e) {
+    console.error(" Failed to parse upload result:", e);
+    return null;
+  }
+}
+
+
+
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const storageId = await uploadImage(values.image);
+    if (!storageId) {
+      console.error(" Image upload failed");
+      return; 
+    }
     await createResident({
       clerkId: values.clerkId,
       fullName: values.fullName,
@@ -85,7 +106,7 @@ export default function OnboardPage() {
       apartmentNumber: values.apartmentNumber,
       moveInDate: values.moveInDate,
       isAdminApproved: false,
-      imageStorageId: storageId, // ✅ store in db
+      imageStorageId: storageId, 
     });
 
     form.reset();
@@ -99,17 +120,17 @@ export default function OnboardPage() {
     <>
 
       <div className="p-6">
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-semibold">Welcome! Let’s Get You Onboarded.</h1>
+            <p className="text-gray-600 mt-2">
+              Please fill in your apartment info to complete your registration.
+            </p>
+          </div>
           <UserButton afterSignOutUrl="/sign-in" />
         </div>
-
-        <h1 className="text-xl font-semibold mt-6">Welcome! Let’s Get You Onboarded.</h1>
-        <p className="text-gray-600 mt-2">
-          Please fill in your apartment info to complete your registration.
-        </p>
-
-
       </div>
+
       <div className="flex justify-center items-center m-2">
         <div className="w-2xl">
           <Form {...form}>
@@ -204,7 +225,7 @@ export default function OnboardPage() {
                 name="image"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="ml-0">Upload Image</FormLabel>
+                    <FormLabel className="ml-0">House Papers Image</FormLabel>
                     <FormControl>
                       <Input
                         name={field.name}

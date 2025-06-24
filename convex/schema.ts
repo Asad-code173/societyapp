@@ -13,10 +13,18 @@ export default defineSchema({
     email: v.string(),
     Contactnumber: v.string(),
     apartmentNumber: v.string(),
-    moveInDate: v.optional(v.string()),     // ISO string
+    moveInDate: v.optional(v.string()),     
     isAdminApproved: v.boolean(),   
-    imageStorageId:v.optional(v.id("_storage"))        // default false
-                     // ISO string (e.g., Date.now().toISOString())
+    imageStorageId:v.id("_storage")     
+                   
   }).index("by_ClerkId", ["clerkId"]),
+  
+  complaint:defineTable({
+    fullName:v.string(),
+    ContactNumber:v.string(),
+    apartmentNumber: v.string(),
+    Message:v.string(),
+    Status:v.boolean(),
+  })
 
 })

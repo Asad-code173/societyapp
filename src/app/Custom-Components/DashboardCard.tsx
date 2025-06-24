@@ -1,6 +1,6 @@
-// app/components/StatCard.tsx
+
 import React from "react";
-import { LucideIcon } from "lucide-react"; // optional if using Lucide icons
+
 
 interface CardProps {
   title: string;

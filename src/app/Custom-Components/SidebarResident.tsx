@@ -5,7 +5,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import { AiOutlineUser } from "react-icons/ai";
+
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaMoneyBillWave } from "react-icons/fa"
 
@@ -16,9 +16,8 @@ const Sidebar = () => {
     const closeSidebar = () => setSidebarOpen(false);
 
     const sideItems = [
-        { url: "/admin/dashboard", text: "Residents", Icon: AiOutlineUser },
-       
-        {url:"/admin/Complains",text:"Complains",Icon:FaMoneyBillWave}
+        // { url: "/resident/dashboard", text: "Residents", Icon: AiOutlineUser },
+        {url:"/resident/dashboard",text:"Complain",Icon:FaMoneyBillWave}
     ];
 
     return (
